@@ -36,7 +36,7 @@
             align-items: center; 
             justify-content: center; 
             margin: 0 auto; 
-            color: #fff000; /* EE Yellow */
+            color: #fff000; 
             font-weight: 900; 
             font-size: 38px; 
             font-family: 'Arial Black', 'Impact', sans-serif; 
@@ -210,7 +210,8 @@
 </div>
 
 <script>
-    const categories = [
+    // 1. Create the default blank slate
+    const defaultCategories = [
         { name: "NEW HANDSETS", target: 0, achieved: 0, whatIf: 0 },
         { name: "UPGRADES", target: 0, achieved: 0, whatIf: 0 },
         { name: "NEW PAYM/SIM", target: 0, achieved: 0, whatIf: 0 },
@@ -218,6 +219,9 @@
         { name: "REG HBB", target: 0, achieved: 0, whatIf: 0 },
         { name: "TV", target: 0, achieved: 0, whatIf: 0 }
     ];
+
+    // 2. Try to load saved data from the browser's memory, otherwise use the blank slate
+    let categories = JSON.parse(localStorage.getItem('eeRhylTargets')) || defaultCategories;
 
     function renderTables() {
         const currentBody = document.getElementById('currentTableBody');
@@ -236,8 +240,7 @@
                 <td><input type="number" min="0" value="${cat.target}" oninput="updateData(${index}, 'target', this.value)"></td>
                 <td><input type="number" min="0" value="${cat.achieved}" oninput="updateData(${index}, 'achieved', this.value)"></td>
                 <td class="highlight">${(kpi * 100).toFixed(2)}%</td>
-                <td class="highlight">${(valPerSale * 100).toFixed(3)}%</td>
-            `;
+                <td class="highlight">${(valPerSale * 100).toFixed(2)}%</td> `;
             currentBody.appendChild(trCurrent);
 
             const trWhatIf = document.createElement('tr');
@@ -257,6 +260,9 @@
         
         categories[index][field] = num;
         
+        // 3. Every time a number is updated, save the new data to the browser's memory
+        localStorage.setItem('eeRhylTargets', JSON.stringify(categories));
+        
         calculateOverall();
         
         const currentRows = document.getElementById('currentTableBody').children;
@@ -264,7 +270,7 @@
         const valPerSale = categories[index].target > 0 ? (1 / categories[index].target) / 6 : 0;
         
         currentRows[index].children[3].innerText = (kpi * 100).toFixed(2) + '%';
-        currentRows[index].children[4].innerText = (valPerSale * 100).toFixed(3) + '%';
+        currentRows[index].children[4].innerText = (valPerSale * 100).toFixed(2) + '%'; // CHANGED TO 2 DECIMAL PLACES
     }
 
     function calculateOverall() {
