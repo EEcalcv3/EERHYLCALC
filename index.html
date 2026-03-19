@@ -2,18 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#009aa6">
+    
     <title>EE Rhyl Target Calculator</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #009aa6; color: #333; margin: 0; padding: 20px 10px; }
-        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 50, 50, 0.3); border-top: 8px solid #005c63; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #009aa6; color: #333; margin: 0; padding: 20px 10px; transition: background-color 0.8s ease; -webkit-tap-highlight-color: transparent; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 50, 50, 0.3); border-top: 8px solid #005c63; transition: box-shadow 0.8s ease, border-top-color 0.8s ease; }
         .logo-container { text-align: center; margin-bottom: 20px; }
-        .code-logo { background-color: #009aa6; width: 85px; height: 85px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: #fff000; font-weight: 900; font-size: 38px; letter-spacing: -1px; border: 3px solid #fff000; }
+        .code-logo { background-color: #009aa6; width: 85px; height: 85px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: #fff000; font-weight: 900; font-size: 38px; letter-spacing: -1px; border: 3px solid #fff000; transition: background-color 0.8s ease; }
         
         h1 { color: #005c63; text-align: center; margin-bottom: 5px; font-size: 1.8em; }
         h2 { color: #009aa6; margin-bottom: 10px; margin-top: 30px; border-bottom: 2px solid #b2e0e3; padding-bottom: 5px; font-size: 1.3em; }
         
-        input[type="number"] { width: 65px; padding: 8px; border: 2px solid #b2e0e3; border-radius: 4px; font-size: 14px; text-align: center; -moz-appearance: textfield; }
+        input[type="number"] { width: 65px; padding: 8px; border: 2px solid #b2e0e3; border-radius: 4px; font-size: 16px; text-align: center; -moz-appearance: textfield; }
         input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"]:focus { outline: none; border-color: #009aa6; }
         
@@ -47,7 +51,7 @@
         .mission-comeback { background-color: #f4f6ff; border-color: #3498db; color: #2c3e50; }
         .mission-raw { background-color: #fff0f0; border-color: #c0392b; color: #2c3e50; }
         
-        .combo-box { background: white; margin-top: 10px; padding: 12px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.05); line-height: 1.8; }
+        .combo-box { background: white; margin-top: 10px; padding: 12px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.05); line-height: 1.8; transition: all 0.4s ease; }
         .strategy-label { display: block; color: #005c63; font-weight: bold; font-size: 0.85em; margin-bottom: 6px; text-transform: uppercase; }
         
         /* ACTION ITEM & STRIKETHROUGH STYLING */
@@ -62,7 +66,7 @@
         }
 
         .commission-banner { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #fff; padding: 15px; border-radius: 8px; text-align: center; font-size: 1.1em; margin-bottom: 20px; display: none; border: 2px solid #e67e22; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .reset-btn { display: block; width: 100%; padding: 15px; background-color: #e74c3c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 1.1em; text-transform: uppercase; }
+        .reset-btn { display: block; width: 100%; padding: 15px; background-color: #e74c3c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 30px; font-size: 1.1em; text-transform: uppercase; }
         .reset-btn:hover { background-color: #c0392b; }
         
         /* HEADER BUTTONS */
@@ -70,6 +74,31 @@
         .refresh-coach-btn { background: none; border: none; color: #555; cursor: pointer; font-weight: bold; font-size: 0.85em; display: flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 6px; transition: background 0.2s; }
         .refresh-coach-btn:hover { background: rgba(0,0,0,0.05); color: #333; }
         
+        /* CREDITS */
+        .credits { text-align: center; margin-top: 25px; font-size: 0.85em; color: #7f8c8d; font-style: italic; border-top: 1px solid #ecf0f1; padding-top: 15px; }
+
+        /* THE FIRE BANNER ANIMATION */
+        .fire-banner {
+            background: linear-gradient(45deg, #ff0000, #ff5a00, #ff9a00, #ffce00, #ff5a00);
+            background-size: 300% 300%;
+            animation: fireGradient 3s ease infinite, popIn 0.5s ease;
+            color: #ffffff !important;
+            text-shadow: 1px 1px 2px #000000, 0 0 10px #ff0000;
+            border: 2px solid #ffce00 !important;
+            box-shadow: 0 0 20px rgba(255, 90, 0, 0.6);
+        }
+
+        /* EPIC FIRE MODE GLOBALS */
+        body.body-fire { background-color: #2c0000; }
+        .container.container-fire { box-shadow: 0 0 60px rgba(255, 60, 0, 0.7); border-top-color: #ff3c00; }
+        .logo-fire { background-color: #ff3c00 !important; box-shadow: 0 0 20px rgba(255, 60, 0, 0.8); }
+
+        @keyframes fireGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         @keyframes strike { 0% { width: 0; } 100% { width: 90%; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
@@ -78,8 +107,8 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-<div class="container">
-    <div class="logo-container"><div class="code-logo">EE</div></div>
+<div class="container" id="mainContainer">
+    <div class="logo-container"><div class="code-logo" id="mainLogo">EE</div></div>
     <h1>EE Rhyl Target Calculator</h1>
     
     <div class="results-container">
@@ -98,14 +127,14 @@
                 <span style="font-size: 0.75em; color: #777; font-style: italic; margin-top: 2px;">(Only add AFTER your shift ends)</span>
                 <div class="quick-tap-cell" style="margin-top:5px;">
                     <button onclick="adjustShifts(-1)" class="quick-add-btn">-</button>
-                    <input type="number" id="shiftsCompleted" value="0" readonly style="width:50px; font-weight:bold; font-size:1.1em; background:transparent; border:none; pointer-events:none;">
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="shiftsCompleted" value="0" readonly style="width:50px; font-weight:bold; font-size:1.1em; background:transparent; border:none; pointer-events:none;">
                     <button onclick="adjustShifts(1)" class="quick-add-btn">+</button>
                 </div>
             </div>
             <div style="display:flex; flex-direction:column; align-items:center;">
                 <label style="font-weight:bold; color:#005c63; text-transform:uppercase; font-size:0.9em;">Total Shifts</label>
                 <span style="font-size: 0.75em; color: transparent; font-style: italic; margin-top: 2px;">Spacer</span>
-                <input type="number" id="totalShifts" value="0" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') { this.value='0'; updatePacing(); }" oninput="updatePacing()" style="margin-top:5px; width:60px; font-weight:bold; font-size:1.1em;">
+                <input type="number" inputmode="numeric" pattern="[0-9]*" id="totalShifts" value="0" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') { this.value='0'; updatePacing(); }" oninput="updatePacing()" style="margin-top:5px; width:60px; font-weight:bold; font-size:1.1em;">
             </div>
         </div>
         <div id="missionMessage" class="mission-message"></div>
@@ -136,6 +165,8 @@
     </div>
 
     <button class="reset-btn" onclick="resetData()">🔄 Reset for New Month</button>
+    
+    <div class="credits">Designed for EE Rhyl by [YOUR NAME HERE]</div>
 </div>
 
 <script>
@@ -206,8 +237,10 @@
     function getKPIColor(p) { return p < 50 ? '#e74c3c' : p < 100 ? '#f39c12' : p < 125 ? '#27ae60' : '#2980b9'; }
     function getOverallColor(p) { return p < 50 ? '#e74c3c' : p < 75 ? '#f39c12' : p < 125 ? '#27ae60' : '#2980b9'; }
 
-    function fireConfetti() {
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    function fireConfetti(colors) {
+        let confConfig = { particleCount: 100, spread: 70, origin: { y: 0.6 } };
+        if (colors) { confConfig.colors = colors; }
+        confetti(confConfig);
     }
 
     function animateValue(element, start, end, duration) {
@@ -302,6 +335,10 @@
 
         if (pacingData.total <= 0 || pacingData.completed <= 0) {
             missionEl.style.display = 'none';
+            // Reset fire mode if they zero out shifts
+            document.body.classList.remove('body-fire');
+            document.getElementById('mainContainer').classList.remove('container-fire');
+            document.getElementById('mainLogo').classList.remove('logo-fire');
             return;
         }
 
@@ -463,9 +500,12 @@
                 missionEl.className = "mission-message mission-behind"; 
                 headerText = `<div style="margin-bottom:10px;"><strong>🎯 Daily Coach:</strong> Add <strong>${dailyGoal.toFixed(2)}%</strong> today to stay exactly on track. Here are 4 ways to hit it:</div>`;
             }
+
+            let prevCompletedBoxes = parseInt(missionEl.getAttribute('data-completed') || '0');
             
             missionEl.innerHTML = controlsHTML + headerText + htmlContent;
 
+            // --- STRIKETHROUGH LOGIC ---
             let sessionSalesDiff = categories.map((c, idx) => c.achieved - (dailyPicks.baseline[idx] || 0));
             let actionItems = missionEl.querySelectorAll('.action-item');
             
@@ -479,6 +519,73 @@
                     el.classList.remove('crossed-off');
                 }
             });
+
+            // --- PROGRESSIVE BINGO SUCCESS LOGIC ---
+            let currentCompletedBoxes = 0;
+            let comboBoxes = missionEl.querySelectorAll('.combo-box');
+            
+            comboBoxes.forEach(box => {
+                let items = box.querySelectorAll('.action-item');
+                let isComplete = true;
+                if(items.length === 0) isComplete = false;
+                
+                items.forEach(item => {
+                    if(!item.classList.contains('crossed-off')) isComplete = false;
+                });
+                
+                if(isComplete) {
+                    box.style.borderColor = '#27ae60';
+                    box.style.backgroundColor = '#f0fdf4';
+                    currentCompletedBoxes++;
+                }
+            });
+
+            let successMessage = "";
+            let bgColor = "#d4edda";
+            let textColor = "#155724";
+            let borderColor = "#c3e6cb";
+            let extraClass = "";
+
+            if (currentCompletedBoxes === 1) {
+                successMessage = "🔥 BOOM! One target locked in! You've officially won the day.";
+            } else if (currentCompletedBoxes === 2) {
+                successMessage = "🚀 DOUBLE KILL! Two targets smashed. You are absolutely flying today!";
+                bgColor = "#cce5ff"; textColor = "#004085"; borderColor = "#b8daff";
+            } else if (currentCompletedBoxes === 3) {
+                successMessage = "⚡ TRIPLE THREAT! Three options cleared. You are carrying the store right now!";
+                bgColor = "#fff3cd"; textColor = "#856404"; borderColor = "#ffeeba";
+            } else if (currentCompletedBoxes === 4) {
+                successMessage = "🔥 LEGENDARY SHIFT! EVERY OPTION DESTROYED. YOU ARE ON FIRE! 🔥";
+                extraClass = "fire-banner"; 
+            }
+
+            let animStyle = (currentCompletedBoxes !== prevCompletedBoxes && currentCompletedBoxes !== 4) ? "animation: popIn 0.5s ease;" : "";
+            let styleText = `display: ${currentCompletedBoxes > 0 ? 'block' : 'none'}; background-color: ${bgColor}; color: ${textColor}; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; font-weight: bold; border: 2px solid ${borderColor}; ${animStyle} font-size: 1.1em;`;
+
+            let successHTML = `<div id="coachSuccessMessage" class="${extraClass}" style="${styleText}">${successMessage}</div>`;
+            missionEl.innerHTML += successHTML;
+
+            // --- THE GLOBAL FIRE OVERRIDE ---
+            if (currentCompletedBoxes === 4) {
+                document.body.classList.add('body-fire');
+                document.getElementById('mainContainer').classList.add('container-fire');
+                document.getElementById('mainLogo').classList.add('logo-fire');
+            } else {
+                document.body.classList.remove('body-fire');
+                document.getElementById('mainContainer').classList.remove('container-fire');
+                document.getElementById('mainLogo').classList.remove('logo-fire');
+            }
+
+            // Check if we need to fire confetti 
+            if (currentCompletedBoxes > prevCompletedBoxes) {
+                if (currentCompletedBoxes === 4) {
+                    fireConfetti(['#ff0000', '#ff5a00', '#ff9a00', '#ffce00']);
+                    setTimeout(() => fireConfetti(['#ff0000', '#ff5a00', '#ff9a00', '#ffce00']), 200);
+                } else {
+                    fireConfetti();
+                }
+            }
+            missionEl.setAttribute('data-completed', currentCompletedBoxes);
         }
     }
 
@@ -495,11 +602,11 @@
             
             cBody.innerHTML += `<tr>
                 <td><strong>${cat.name}</strong></td>
-                <td><input type="number" value="${cat.target}" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') { this.value='0'; updateData(${i},'target','0'); }" oninput="updateData(${i},'target',this.value)"></td>
+                <td><input type="number" inputmode="numeric" pattern="[0-9]*" value="${cat.target}" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') { this.value='0'; updateData(${i},'target','0'); }" oninput="updateData(${i},'target',this.value)"></td>
                 <td>
                     <div class="quick-tap-cell">
                         <button class="quick-add-btn" onclick="quickAdjust(${i},'achieved',-1)">-</button>
-                        <input type="number" id="achieved-in-${i}" value="${cat.achieved}" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') { this.value='0'; updateData(${i},'achieved','0'); }" oninput="updateData(${i},'achieved',this.value)">
+                        <input type="number" inputmode="numeric" pattern="[0-9]*" id="achieved-in-${i}" value="${cat.achieved}" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') { this.value='0'; updateData(${i},'achieved','0'); }" oninput="updateData(${i},'achieved',this.value)">
                         <button class="quick-add-btn" onclick="quickAdjust(${i},'achieved',1)">+</button>
                     </div>
                 </td>
@@ -517,7 +624,7 @@
                 <td>
                     <div class="quick-tap-cell">
                         <button class="quick-add-btn" onclick="quickAdjust(${i},'whatIf',-1)">-</button>
-                        <input type="number" id="whatif-in-${i}" value="${cat.whatIf}" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') { this.value='0'; updateData(${i},'whatIf','0'); }" oninput="updateData(${i},'whatIf',this.value)">
+                        <input type="number" inputmode="numeric" pattern="[0-9]*" id="whatif-in-${i}" value="${cat.whatIf}" onfocus="if(this.value==='0') this.value='';" onblur="if(this.value==='') { this.value='0'; updateData(${i},'whatIf','0'); }" oninput="updateData(${i},'whatIf',this.value)">
                         <button class="quick-add-btn" onclick="quickAdjust(${i},'whatIf',1)">+</button>
                     </div>
                 </td>
