@@ -168,7 +168,7 @@
     </div>
 
     <button class="reset-btn" onclick="resetData()">🔄 Reset for New Month</button>
-    <div class="credits">Designed for EE Rhyl by [YOUR NAME HERE]</div>
+    <div class="credits">Designed for EE Rhyl by Reece Farrelly</div>
 </div>
 
 <script>
@@ -533,7 +533,7 @@
             localStorage.removeItem('eeRhylCoachPicks');
             missionEl.style.display = 'block';
             missionEl.className = "mission-message mission-raw";
-            missionEl.innerHTML = `<div style="text-align:center;"><strong>⚙️ Diagnostics Scanner...</strong><br>We encountered a browser hiccup. Please tell your manager: <br><br><span style="font-family:monospace; color:#c0392b;">${error.message}</span><br><br>Tap '+' on your shifts to reset.</div>`;
+            missionEl.innerHTML = `<div style="text-align:center;"><strong>⚙️ Diagnostics Scanner...</strong><br>We encountered a browser hiccup. Please tell Reece this error code: <br><br><span style="font-family:monospace; color:#c0392b;">${error.message}</span><br><br>Tap '+' on your shifts to reset.</div>`;
         }
     }
 
