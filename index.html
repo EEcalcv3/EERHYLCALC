@@ -9,20 +9,20 @@
     
     <title>EE Rhyl Target Calculator</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #009aa6; color: #333; margin: 0; padding: 20px 10px; transition: background-color 0.8s ease, background 0.8s ease; -webkit-tap-highlight-color: transparent; }
-        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 50, 50, 0.3); border-top: 8px solid #005c63; transition: box-shadow 0.8s ease, border-top-color 0.8s ease; position: relative; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #009aa6; color: #333; margin: 0; padding: 20px 10px; transition: background-color 0.8s ease; -webkit-tap-highlight-color: transparent; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 50, 50, 0.3); border-top: 8px solid #005c63; transition: border-top-color 0.8s ease; position: relative; }
         .logo-container { text-align: center; margin-bottom: 20px; }
         
         /* THE SECRET BACKDOOR LOGO */
-        .code-logo { background-color: #009aa6; width: 85px; height: 85px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: #fff000; font-weight: 900; font-size: 38px; letter-spacing: -1px; border: 3px solid #fff000; transition: all 0.8s ease; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .code-logo { background-color: #009aa6; width: 85px; height: 85px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: #fff000; font-weight: 900; font-size: 38px; letter-spacing: -1px; border: 3px solid #fff000; transition: transform 0.2s ease, background-color 0.8s ease; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .code-logo:active { transform: scale(0.95); }
         
         h1 { color: #005c63; text-align: center; margin-bottom: 5px; font-size: 1.8em; }
         h2 { color: #009aa6; margin-bottom: 10px; margin-top: 30px; border-bottom: 2px solid #b2e0e3; padding-bottom: 5px; font-size: 1.3em; }
         
         /* MODAL STYLING */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; padding: 20px; box-sizing: border-box;}
-        .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 100%; box-shadow: 0 15px 30px rgba(0,0,0,0.3); border-top: 6px solid #f39c12; max-height: 80vh; overflow-y: auto; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 9999; display: none; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; padding: 20px; box-sizing: border-box;}
+        .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 100%; box-shadow: 0 15px 30px rgba(0,0,0,0.5); border-top: 6px solid #f39c12; max-height: 80vh; overflow-y: auto; }
         .modal-content h3 { margin-top: 0; color: #005c63; font-size: 1.5em; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px;}
         .version-block { margin-bottom: 20px; }
         .version-block h4 { margin: 0 0 10px 0; font-size: 1.1em; color: #e67e22; }
@@ -34,12 +34,12 @@
         .version-tag { position: fixed; bottom: 10px; right: 15px; font-size: 0.8em; color: rgba(255,255,255,0.6); font-weight: bold; z-index: 100; pointer-events: none; }
 
         /* BUTTON STYLING */
-        .setup-btn { background-color: #f39c12; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: block; margin: 0 auto 25px auto; font-size: 0.95em; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px;}
+        .setup-btn { background-color: #f39c12; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: block; margin: 0 auto 25px auto; font-size: 0.95em; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s ease, background-color 0.2s ease; text-transform: uppercase; letter-spacing: 0.5px;}
         .setup-btn:active { transform: scale(0.95); }
         .lock-btn { background-color: #e74c3c; animation: pulseLock 2s infinite; }
         @keyframes pulseLock { 0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); } }
         
-        input[type="number"], input[type="password"] { width: 65px; padding: 8px; border: 2px solid #b2e0e3; border-radius: 4px; font-size: 16px; text-align: center; -moz-appearance: textfield; transition: all 0.3s ease;}
+        input[type="number"], input[type="password"] { width: 65px; padding: 8px; border: 2px solid #b2e0e3; border-radius: 4px; font-size: 16px; text-align: center; -moz-appearance: textfield; transition: border-color 0.2s ease;}
         input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"]:focus, input[type="password"]:focus { outline: none; border-color: #009aa6; }
         input[type="number"]:disabled { color: #333; opacity: 1; -webkit-text-fill-color: #333; }
@@ -67,9 +67,7 @@
         }
         .result-box { 
             flex: 1; 
-            background: rgba(230, 245, 246, 0.95); 
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            background: #e6f5f6; /* Solid color, NO blur for performance */
             padding: 20px; 
             border-radius: 8px; 
             text-align: center; 
@@ -80,7 +78,7 @@
         .result-value { font-size: 3em; font-weight: bold; transition: color 0.4s ease; }
         
         .quick-tap-cell { display: flex; align-items: center; justify-content: center; gap: 5px; height: 35px; }
-        .quick-add-btn { background-color: #009aa6; color: white; border: none; width: 35px; height: 35px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1.2em; touch-action: manipulation; transition: opacity 0.3s;}
+        .quick-add-btn { background-color: #009aa6; color: white; border: none; width: 35px; height: 35px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1.2em; touch-action: manipulation; transition: background-color 0.2s ease, opacity 0.2s ease;}
         .quick-add-btn:hover { background-color: #005c63; }
         .quick-add-btn:active { transform: scale(0.95); }
         .quick-add-btn:disabled { background-color: #bdc3c7; cursor: not-allowed; transform: none; }
@@ -96,7 +94,7 @@
         .shift-lock-msg { color: #27ae60; font-size: 0.8em; font-weight: bold; margin-top: 8px; display: none; text-align: center; white-space: nowrap;}
         
         /* APP LOCKDOWN STYLING */
-        .locked-area { opacity: 0.4; pointer-events: none; filter: grayscale(100%); transition: all 0.3s ease; user-select: none; }
+        .locked-area { opacity: 0.4; pointer-events: none; filter: grayscale(100%); transition: filter 0.3s ease, opacity 0.3s ease; user-select: none; }
 
         .mission-message { margin-top: 15px; padding: 20px; border-radius: 8px; display: none; text-align: left; border-left: 6px solid; animation: fadeIn 0.5s ease; position: relative;}
         .mission-behind { background-color: #fff5f5; border-color: #e74c3c; } 
@@ -107,10 +105,10 @@
         .mission-maximizer { background-color: #fffcf2; border-color: #d4af37; color: #333; }
         .mission-setup { background-color: #fffaf0; border-color: #f39c12; color: #333; border-style: dashed; }
         
-        .combo-box { background: white; margin-top: 10px; padding: 12px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.05); line-height: 1.8; transition: all 0.4s ease; }
+        .combo-box { background: white; margin-top: 10px; padding: 12px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.05); line-height: 1.8; transition: background-color 0.3s ease, border-color 0.3s ease; }
         .strategy-label { display: block; color: #005c63; font-weight: bold; font-size: 0.85em; margin-bottom: 6px; text-transform: uppercase; }
         
-        .action-item { position: relative; display: inline-block; background: #009aa6; color: white; padding: 6px 12px; border-radius: 6px; margin: 3px; font-weight: bold; font-size: 0.95em; transition: all 0.3s ease; }
+        .action-item { position: relative; display: inline-block; background: #009aa6; color: white; padding: 6px 12px; border-radius: 6px; margin: 3px; font-weight: bold; font-size: 0.95em; transition: background-color 0.3s ease, opacity 0.3s ease; }
         .action-or { font-weight: bold; color: #777; margin: 0 8px; font-size: 0.8em; }
         
         .action-item.crossed-off { background-color: #bdc3c7; color: #ecf0f1; opacity: 0.8; }
@@ -165,7 +163,7 @@
 </head>
 <body>
 
-<div class="version-tag">v1.4.7</div>
+<div class="version-tag">v1.4.8</div>
 
 <div class="modal-overlay" id="devPasswordModal">
     <div class="modal-content" style="max-width: 350px; text-align: center; border-top: 6px solid #e74c3c;">
@@ -194,9 +192,9 @@
         <h3>🚀 Release Notes</h3>
         
         <div class="version-block">
-            <h4 style="color:#e67e22;">v1.4.7 (The Feature Consolidation)</h4>
-            <p style="color: #555; font-size: 0.9em; margin-top: -5px;">Here is the complete list of EVERYTHING Reece has engineered into the application today:</p>
+            <h4 style="color:#e67e22;">v1.4.8</h4>
             <ul>
+                <li><strong>Mobile Performance Overhaul:</strong> Removed heavy CSS background blurs and optimized animation properties so the app runs smoothly without stuttering on phones.</li>
                 <li><strong>Strict App Lockdown:</strong> The app completely freezes your coach, tracking, and projections until you update your Completed Shifts for the day to ensure math is never broken.</li>
                 <li><strong>Custom Modal Warnings:</strong> Replaced ugly browser prompts with sleek, branded pop-ups for confirmations, shift locks, and admin passwords.</li>
                 <li><strong>Confirm & Lock Mechanic:</strong> If you miss a day, you can adjust your shifts freely using both +/- or typing, and then click 'Confirm' to lock the app for the day.</li>
@@ -338,7 +336,7 @@
 </div>
 
 <script>
-    const APP_VERSION = "1.4.7";
+    const APP_VERSION = "1.4.8";
 
     const defaultCategories = [
         { name: "NEW HANDSETS", target: 0, achieved: 0, whatIf: 0 },
@@ -524,6 +522,13 @@
         let plusBtn = document.getElementById('shiftPlusBtn');
         let lockMsg = document.getElementById('shiftLockMsg');
         let confirmBtn = document.getElementById('confirmShiftsBtn');
+
+        // Hide minus button for regular users
+        if (!isDevMode) {
+            minusBtn.style.display = 'none';
+        } else {
+            minusBtn.style.display = 'inline-block';
+        }
 
         // If they have not locked the month in or are in setup mode, leave it open.
         if (!pacingData.monthLocked || isSetupMode) {
@@ -729,7 +734,7 @@
             currentEl.innerText = "---";
             projectedEl.innerText = "---";
             currentEl.style.color = "#ccc";
-            projectedEl.style.color = "#ccc";
+            currentEl.style.color = "#ccc";
 
             document.getElementById('missionMessage').style.display = 'block';
             document.getElementById('missionMessage').className = "mission-message mission-setup";
@@ -967,7 +972,7 @@
                         let containerBorder = hitToday ? '4px solid #27ae60' : '4px solid #d4af37';
                         let containerBg = hitToday ? '#f0fdf4' : 'white';
                         
-                        maxHtml += `<div class="combo-box" style="border-left: ${containerBorder}; background-color: ${containerBg}; padding-bottom: 12px; transition: all 0.4s ease;">
+                        maxHtml += `<div class="combo-box" style="border-left: ${containerBorder}; background-color: ${containerBg}; padding-bottom: 12px; transition: border-color 0.3s ease, background-color 0.3s ease; ">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                 <div style="display: flex; align-items: center;">
                                     <strong style="color:${hitToday ? '#27ae60' : '#b38728'}; font-size: 1.1em;">${cat.name}</strong>
