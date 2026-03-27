@@ -128,7 +128,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* THE MOBILE CSS FIX: Perfectly scales the 5 columns to prevent horizontal scrolling */
+        /* THE MOBILE CSS FIX */
         @media (max-width: 600px) {
             .container { padding: 15px 5px; box-shadow: none; border: 1px solid #ddd; border-top: 6px solid #005c63; } 
             .results-container { flex-direction: row; gap: 10px; top: 5px; }
@@ -140,7 +140,6 @@
             .result-value { font-size: 2.2em; }
             .run-rate-inputs { flex-direction: column; gap: 20px; align-items: center;}
             
-            /* DYNAMIC SCALING FOR THE MAIN TABLE */
             table { width: 100%; min-width: 100%; } 
             td, th { padding: 6px 2px; font-size: 0.75em; letter-spacing: -0.5px; text-align: center; } 
             th:first-child, td:first-child { text-align: left; }
@@ -157,7 +156,7 @@
 </head>
 <body>
 
-<div class="version-tag">v1.6.3</div>
+<div class="version-tag">v1.6.4</div>
 
 <div class="modal-overlay" id="devPasswordModal">
     <div class="modal-content" style="max-width: 350px; text-align: center; border-top: 6px solid #e74c3c;">
@@ -185,9 +184,10 @@
     <div class="modal-content">
         <h3>🚀 Release Notes</h3>
         <div class="version-block">
-            <h4>v1.6.3</h4>
+            <h4>v1.6.4</h4>
             <p style="color: #555; font-size: 0.9em; margin-top: -5px;">Update by Reece:</p>
             <ul>
+                <li><strong>No More Decimals:</strong> Apologies for the regression! I permanently ripped out the decimal logic that reappeared in the buffer days. It is now completely locked back to clean, whole numbers (-1, 0, 1, 2).</li>
                 <li><strong>Phantom Crash Terminated:</strong> Removing the old 'Projected %' box caused a fatal invisible crash in the background, which completely stopped the Daily Tracker and Coach from loading. All phantom math has been scrubbed to restore full stability.</li>
                 <li><strong>Smart Visibility Tracker:</strong> Added an intelligent background tracker. If you leave the app open overnight, it will silently detect the date change and automatically refresh the page the next morning so the app is never out of sync.</li>
                 <li><strong>Mobile Layout & VPS Fix:</strong> The VPS column was pushed off-screen on some devices after removing the bottom table. Re-engineered the mobile CSS so all 5 columns (including VPS) auto-scale and fit perfectly on your phone screen without horizontal scrolling.</li>
@@ -309,7 +309,7 @@
 </div>
 
 <script>
-    const APP_VERSION = "1.6.3";
+    const APP_VERSION = "1.6.4";
 
     const defaultCategories = [
         { name: "NEW HANDSETS", target: 0, achieved: 0 },
@@ -609,17 +609,19 @@
         let aheadByPercentage = currentP - expectedBenchmark;
         let bufferShifts = aheadByPercentage / dailyPace;
         
+        let safeShifts = Math.floor(bufferShifts);
+        
         bufferEl.style.display = 'block';
-        if (bufferShifts >= -0.05) { 
-            let displayShifts = Math.max(0, bufferShifts).toFixed(1);
-            let displayPerc = Math.max(0, aheadByPercentage).toFixed(2);
+        if (safeShifts >= 1) { 
             bufferEl.className = "buffer-box buffer-green";
-            bufferEl.innerHTML = `<div style="font-size: 1.25em;">🟢 <strong>+${displayShifts} Buffer Shifts Banked</strong></div><div class="buffer-desc">You are exactly <strong>+${displayPerc}%</strong> ahead of your required monthly pace! This safety net equals ${displayShifts} standard shifts. If you have a shift where you sell 0 items, this buffer will absorb the hit (subtracting 1.0) to keep you perfectly on track.</div>`;
-        } else {
-            let displayShifts = Math.abs(bufferShifts).toFixed(1);
-            let displayPerc = Math.abs(aheadByPercentage).toFixed(2);
+            bufferEl.innerHTML = `<div style="font-size: 1.25em;">🟢 <strong>+${safeShifts} Buffer Day${safeShifts > 1 ? 's' : ''} Banked</strong></div><div class="buffer-desc">A "Buffer Day" means you are ahead of target! You can afford to sell <strong>0</strong> items on your next <strong>${safeShifts}</strong> shift${safeShifts > 1 ? 's' : ''} and still stay perfectly on track.</div>`;
+        } else if (safeShifts === 0) {
             bufferEl.className = "buffer-box buffer-red";
-            bufferEl.innerHTML = `<div style="font-size: 1.25em;">🔴 <strong>-${displayShifts} Shifts Behind Pace</strong></div><div class="buffer-desc">You are currently <strong>${displayPerc}%</strong> behind your required monthly pace. Your safety net is empty, meaning you must follow the Coach targets today to avoid dropping further behind!</div>`;
+            bufferEl.innerHTML = `<div style="font-size: 1.25em;">🔴 <strong>0 Buffer Days Banked</strong></div><div class="buffer-desc">You are currently on the line. Your safety net is empty, meaning you must hit the Coach targets today to avoid dropping behind pace.</div>`;
+        } else {
+            let behind = Math.abs(safeShifts);
+            bufferEl.className = "buffer-box buffer-red";
+            bufferEl.innerHTML = `<div style="font-size: 1.25em;">🔴 <strong>-${behind} Buffer Day${behind !== 1 ? 's' : ''} (Behind Pace)</strong></div><div class="buffer-desc">You are mathematically behind by ${behind} full shift${behind !== 1 ? 's' : ''}. Use the Coach's Catch-Up Strategy to rebuild your momentum and get back to 0.</div>`;
         }
     }
 
@@ -1277,9 +1279,45 @@
                 if(isComplete) {
                     box.style.borderColor = '#27ae60';
                     box.style.backgroundColor = '#f0fdf4';
+                    currentCompletedBoxes++;
                 }
             }
 
+            let successMessage = "";
+            let bgColor = "#d4edda", textColor = "#155724", borderColor = "#c3e6cb", extraClass = "";
+            if (currentCompletedBoxes > 0) {
+                successMessage = "🔥 SHIFT TARGET SMASHED! You've successfully cleared an option. Keep going!";
+            } else if (isRogueHit) {
+                successMessage = "💡 RENEGADE SHIFT! You didn't clear a specific option, but you mathematically beat your raw target. You won the day!";
+                bgColor = "#f3e8ff"; textColor = "#6b21a8"; borderColor = "#d8b4fe";
+            }
+
+            let showBanner = currentCompletedBoxes > 0 || isRogueHit;
+            let prevRogueHit = missionEl.getAttribute('data-rogue') === 'true';
+            let animStyle = "";
+            if (currentCompletedBoxes !== prevCompletedBoxes && currentCompletedBoxes > 0) { animStyle = "animation: popIn 0.3s ease;"; } 
+            else if (isRogueHit && !prevRogueHit) { animStyle = "animation: popIn 0.3s ease;"; }
+
+            let styleText = `display: ${showBanner ? 'block' : 'none'}; background-color: ${bgColor}; color: ${textColor}; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; font-weight: bold; border: 2px solid ${borderColor}; ${animStyle} font-size: 1.1em;`;
+            missionEl.innerHTML += `<div id="coachSuccessMessage" class="${extraClass}" style="${styleText}">${successMessage}</div>`;
+
+            if (currentCompletedBoxes >= 4) {
+                document.body.classList.add('body-fire');
+                document.getElementById('mainContainer').classList.add('container-fire');
+                document.getElementById('mainLogo').classList.add('logo-fire');
+            } else {
+                document.body.classList.remove('body-fire');
+                document.getElementById('mainContainer').classList.remove('container-fire');
+                document.getElementById('mainLogo').classList.remove('logo-fire');
+            }
+
+            if (currentCompletedBoxes > prevCompletedBoxes) {
+                 fireConfetti(); 
+            } else if (isRogueHit && !prevRogueHit) { fireConfetti(['#a855f7', '#d8b4fe', '#ffffff']); }
+
+            missionEl.setAttribute('data-completed', currentCompletedBoxes);
+            missionEl.setAttribute('data-rogue', isRogueHit);
+            
         } catch (error) {
             localStorage.removeItem('eeRhylCoachPicks');
             missionEl.style.display = 'block';
